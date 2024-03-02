@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  frontend:
+    image: fronten:2.02
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_BASE_URL=https://kdt-ai-8-team02.elicecoding.com/api
+
+  backend:
+    image: backend:2.03
+    env_file:
+      - ./back/.env
+    ports:
+      - "5001:5001"
+    environment:
+      - name=value
+
+  flask:
+    image: flask-image
+    ports:
+      - "5000:5000"
+    command: python app.py
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-config:/etc/nginx/conf.d
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  db_data:
